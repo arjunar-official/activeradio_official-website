@@ -214,6 +214,11 @@ h1.hero-title .line span{ display:inline-block; transform:translateY(110%); }
 #lightbox{ position:fixed; inset:0; background:rgba(5,5,6,0.95); z-index:2000; display:none; align-items:center; justify-content:center; padding:40px; }
 #lightbox img{ max-width:90%; max-height:88vh; object-fit:contain; }
 #lightbox .lb-close{ position:absolute; top:32px; right:40px; font-size:14px; letter-spacing:0.14em; text-transform:uppercase; cursor:none; }
+#video-lightbox{ position:fixed; inset:0; background:rgba(5,5,6,0.95); z-index:2000; display:none; align-items:center; justify-content:center; padding:40px; }
+#video-lightbox .vframe{ width:min(1100px, 92vw); aspect-ratio:16/9; background:#000; box-shadow:0 20px 60px rgba(0,0,0,0.6); }
+#video-lightbox iframe{ width:100%; height:100%; border:0; display:block; }
+#video-lightbox .lb-close{ position:absolute; top:32px; right:40px; font-size:14px; letter-spacing:0.14em; text-transform:uppercase; cursor:none; }
+@media(max-width:768px){ #video-lightbox{ padding:16px; } }
 
 /* SERVICES */
 .services-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin-top:20px; }
@@ -422,6 +427,8 @@ footer img.footlogo{ height:26px; mix-blend-mode:screen; }
 </section>
 
 <div id="lightbox"><span class="lb-close">Close ✕</span><img src="" alt=""></div>
+
+<div id="video-lightbox"><span class="lb-close" id="vlb-close">Close ✕</span><div class="vframe"><iframe id="showreel-iframe" src="" title="Active Radio Showreel" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div></div>
 
 <section id="services">
   <div class="wrap">
@@ -746,11 +753,27 @@ soundBtn.addEventListener('click', (e)=>{
   updateSoundIcon();
 });
 
-// ---------- SHOWREEL PLACEHOLDER ----------
-document.getElementById('showreel-trigger').addEventListener('click', function(e){
+// ---------- SHOWREEL VIDEO ----------
+const videoLb = document.getElementById('video-lightbox');
+const showreelIframe = document.getElementById('showreel-iframe');
+let musicWasPlaying = false;
+
+function openShowreel(e){
   e.preventDefault();
-  alert('Add your showreel video link here — replace the #showreel-trigger href or embed a YouTube iframe.');
-});
+  musicWasPlaying = !music.paused && !music.muted;
+  music.pause();
+  showreelIframe.src = 'https://www.youtube.com/embed/Li-UaRIFtzQ?autoplay=1&rel=0';
+  videoLb.style.display = 'flex';
+}
+function closeShowreel(){
+  showreelIframe.src = '';
+  videoLb.style.display = 'none';
+  if(musicWasPlaying) music.play().catch(()=>{});
+}
+document.getElementById('showreel-trigger').addEventListener('click', openShowreel);
+document.getElementById('vlb-close').addEventListener('click', closeShowreel);
+videoLb.addEventListener('click', (e)=>{ if(e.target===videoLb) closeShowreel(); });
+window.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && videoLb.style.display==='flex') closeShowreel(); });
 </script>
 </body>
 </html>
