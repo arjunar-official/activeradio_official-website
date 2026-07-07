@@ -91,6 +91,35 @@ nav ul li a:hover{ color:var(--white); }
 nav .nav-cta{ border:1px solid var(--crimson); padding:10px 22px; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; font-weight:700; }
 @media(max-width:900px){ nav ul{ display:none; } nav{ padding:20px 24px; } }
 
+/* SOUND TOGGLE */
+.nav-right{ display:flex; align-items:center; gap:16px; }
+#sound-toggle{
+  width:40px; height:40px; border-radius:50%; flex:0 0 auto;
+  border:1px solid var(--line); background:var(--glass);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--muted); cursor:none; transition:color .2s, border-color .2s;
+}
+#sound-toggle:hover{ color:var(--white); border-color:var(--crimson); }
+#sound-toggle svg{ width:16px; height:16px; display:block; }
+#sound-toggle .icon-muted{ display:none; }
+#sound-toggle.muted .icon-on{ display:none; }
+#sound-toggle.muted .icon-muted{ display:block; }
+#sound-toggle.muted{ color:var(--muted); }
+
+/* WHATSAPP FLOAT */
+#whatsapp-float{
+  position:fixed; right:28px; bottom:28px; z-index:1500;
+  width:56px; height:56px; border-radius:50%;
+  background:#25D366; display:flex; align-items:center; justify-content:center;
+  box-shadow:0 10px 28px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
+  opacity:0; visibility:hidden; transform:translateY(16px); cursor:none;
+  transition:opacity .35s ease, transform .35s ease, visibility .35s, box-shadow .3s;
+}
+#whatsapp-float.show{ opacity:1; visibility:visible; transform:translateY(0); }
+#whatsapp-float:hover{ transform:translateY(-4px); box-shadow:0 14px 34px rgba(37,211,102,0.35), 0 0 0 1px rgba(255,255,255,0.12); }
+#whatsapp-float svg{ width:30px; height:30px; fill:#fff; }
+@media(max-width:900px){ #whatsapp-float{ right:18px; bottom:18px; width:52px; height:52px; } }
+
 /* HERO */
 .hero{ height:100vh; position:relative; overflow:hidden; padding:0; display:flex; align-items:flex-end; }
 .hero-media{ position:absolute; inset:0; overflow:hidden; }
@@ -310,7 +339,13 @@ footer img.footlogo{ height:26px; mix-blend-mode:screen; }
     <li><a href="#booking">Booking</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <a href="#booking" class="nav-cta">Book Now</a>
+  <div class="nav-right">
+    <button id="sound-toggle" class="muted" aria-label="Toggle music" title="Music on/off">
+      <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+      <svg class="icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+    </button>
+    <a href="#booking" class="nav-cta">Book Now</a>
+  </div>
 </nav>
 
 <section class="hero" id="hero">
@@ -534,6 +569,12 @@ footer img.footlogo{ height:26px; mix-blend-mode:screen; }
   </div>
 </footer>
 
+<audio id="site-music" src="audio/site_music.mp3" loop preload="auto"></audio>
+
+<a id="whatsapp-float" href="https://wa.me/919544682166?text=Hi%2C%20Active%20Radio" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" title="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+</a>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
@@ -588,8 +629,10 @@ document.querySelectorAll('a, button, .g-item, .band-card, input, select, textar
 
 // ---------- NAV SCROLL STATE ----------
 const navEl = document.getElementById('nav');
+const waFloat = document.getElementById('whatsapp-float');
 window.addEventListener('scroll', ()=>{
   if(window.scrollY>40) navEl.classList.add('scrolled'); else navEl.classList.remove('scrolled');
+  waFloat.classList.toggle('show', window.scrollY>300);
 });
 
 // ---------- SCROLL REVEALS ----------
@@ -648,6 +691,39 @@ document.getElementById('booking-form').addEventListener('submit', function(e){
   for(const [k,v] of data.entries()){ body += `${k}: ${v}\n`; }
   const subject = encodeURIComponent('Booking enquiry — Active Radio');
   window.location.href = `mailto:booking@activeradio.example?subject=${subject}&body=${encodeURIComponent(body)}`;
+});
+
+// ---------- BACKGROUND MUSIC ----------
+const music = document.getElementById('site-music');
+const soundBtn = document.getElementById('sound-toggle');
+music.volume = 0.6;
+let musicWanted = localStorage.getItem('ar-music') !== 'off';
+
+function updateSoundIcon(){
+  soundBtn.classList.toggle('muted', music.paused || music.muted);
+}
+function startMusic(){
+  if(!musicWanted) return;
+  music.play().then(updateSoundIcon).catch(()=>{});
+}
+music.addEventListener('play', updateSoundIcon);
+music.addEventListener('pause', updateSoundIcon);
+
+// browsers block autoplay with sound — try immediately, then retry on the first user gesture
+startMusic();
+['pointerdown','keydown','touchstart'].forEach(evt=>{
+  window.addEventListener(evt, (ev)=>{
+    if(!soundBtn.contains(ev.target) && music.paused) startMusic();
+  }, { once:true });
+});
+
+soundBtn.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  if(music.paused){ musicWanted = true; music.muted = false; music.play().catch(()=>{}); }
+  else if(music.muted){ musicWanted = true; music.muted = false; }
+  else { musicWanted = false; music.muted = true; }
+  localStorage.setItem('ar-music', musicWanted ? 'on' : 'off');
+  updateSoundIcon();
 });
 
 // ---------- SHOWREEL PLACEHOLDER ----------
